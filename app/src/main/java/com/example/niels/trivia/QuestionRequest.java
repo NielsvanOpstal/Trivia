@@ -62,6 +62,7 @@ public class QuestionRequest implements Response.Listener<JSONArray>, Response.E
 
         } catch(JSONException e){
             Log.d("Er ging iets mis", e.toString());
+            getCategories(activity);
         }
     }
 }
