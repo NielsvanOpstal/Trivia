@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import static com.example.niels.trivia.MainActivity.myRef;
+
 public class NameActivity extends AppCompatActivity {
 
     private int score;
@@ -22,9 +24,9 @@ public class NameActivity extends AppCompatActivity {
 
     public void nameSubmitted(View view) {
         EditText name = findViewById(R.id.NameName);
-        Intent intent = new Intent(NameActivity.this, HighscoreActivity.class);
-        intent.putExtra("score", score);
-        intent.putExtra("name", name.getText().toString());
-        startActivity(intent);
+        Highscore highscore = new Highscore(score, name.getText().toString());
+        myRef.push().setValue(highscore);
+
+        startActivity(new Intent(NameActivity.this, HighscoreActivity.class));
     }
 }
