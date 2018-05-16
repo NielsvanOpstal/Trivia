@@ -19,7 +19,7 @@ public class QuestionRequest implements Response.Listener<JSONArray>, Response.E
 
     private Callback activity;
     private Context context;
-    private static final int nQuestions = 5;
+    public static final int nQuestions = 5;
     public interface Callback {
         void gotCategories(ArrayList<QuestionItem> categories);
         void gotCategoriesError(String message);
