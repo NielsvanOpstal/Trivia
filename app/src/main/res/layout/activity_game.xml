@@ -57,4 +57,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/GameSubmit"
         app:layout_constraintEnd_toStartOf="@+id/GameSubmit"
         app:layout_constraintStart_toStartOf="@+id/GameAnswer" />
+
 </android.support.constraint.ConstraintLayout>

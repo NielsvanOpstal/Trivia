@@ -1,7 +1,6 @@
 package com.example.niels.trivia;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,7 +18,7 @@ public class QuestionRequest implements Response.Listener<JSONArray>, Response.E
 
     private Callback activity;
     private Context context;
-    public static final int nQuestions = 5;
+    public static final int NQUESTIONS = 5;
     public interface Callback {
         void gotCategories(ArrayList<QuestionItem> categories);
         void gotCategoriesError(String message);
@@ -32,23 +31,24 @@ public class QuestionRequest implements Response.Listener<JSONArray>, Response.E
     public void getCategories(Callback aActivity){
         activity = aActivity;
 
+        // Requests 5 random questions from the jservice API
         RequestQueue queue = Volley.newRequestQueue(context);
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest("http://jservice.io/api/random?count=" + nQuestions, this, this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest("http://jservice.io/api/random?count=" + NQUESTIONS, this, this);
         queue.add(jsonArrayRequest);
     }
+
     @Override
     public void onErrorResponse(VolleyError error) {
         activity.gotCategoriesError(error.getMessage());
-        Log.d("PRINTKE", error.getMessage());
-        Log.d("PRINTJE", "ERROR gekregen");
     }
 
     @Override
     public void onResponse(JSONArray aResponse) {
         ArrayList<QuestionItem> questions = new ArrayList<>();
 
+        // Tries to make the JSONobjects into QuestionsItem Objects
         try {
-            for(int i = 0; i < nQuestions; i++){
+            for(int i = 0; i < NQUESTIONS; i++){
                 JSONObject response = aResponse.getJSONObject(i);
                 QuestionItem question = new QuestionItem();
                 question.setAnswer(response.getString("answer"));
@@ -56,12 +56,11 @@ public class QuestionRequest implements Response.Listener<JSONArray>, Response.E
                 question.setQuestionID(response.getInt("id"));
                 question.setValue(response.getInt("value"));
                 questions.add(question);
-
             }
             activity.gotCategories(questions);
 
         } catch(JSONException e){
-            Log.d("Er ging iets mis", e.toString());
+            // If something went wrong, try again
             getCategories(activity);
         }
     }

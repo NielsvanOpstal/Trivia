@@ -14,27 +14,31 @@ import java.util.List;
 
 public class HighscoreAdapter extends ArrayAdapter<Highscore> {
 
-    ArrayList<Highscore> highscores = new ArrayList<>();
+    ArrayList<Highscore> highscores;
 
     public HighscoreAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Highscore> objects) {
         super(context, resource, objects);
 
+        // Puts the received Highscores in a classwide list
         highscores = objects;
     }
+
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        // Inflate categorylistitem.xml when converview is null
+        // Inflate highscorelistitem.xml when convertview is null
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.highscorelistitem, parent, false);
         }
 
-        // Fills the categorylistitem.xml and returns it
+        // Fills the highscorelistitem.xml and returns it
         TextView name = convertView.findViewById(R.id.HighscoreName);
         TextView score = convertView.findViewById(R.id.HighscoreScore);
         name.setText(highscores.get(position).getName());
-        score.setText("Score: " + highscores.get(position).getName());
+        score.setText("Score: " + highscores.get(position).getScore());
+
         return convertView;
     }
 }

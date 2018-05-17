@@ -1,21 +1,11 @@
 package com.example.niels.trivia;
 
-import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-
-import static android.content.ContentValues.TAG;
-import static com.example.niels.trivia.MainActivity.myRef;
+import static com.example.niels.trivia.MainActivity.MYREF;
 
 public class HighscoreRequest {
 
@@ -34,29 +24,28 @@ public class HighscoreRequest {
     public void getHighscores(Callback aActivity) {
 
         activity = aActivity;
-
         final ArrayList<Highscore> highscores = new ArrayList<>();
 
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        // Anonymous function to receive the values from the database
+        MYREF.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("TAGGAANWE", dataSnapshot.toString());
-//                Log.d("SDOFJASDFJASLDKFALSKDJFAKSD", dataSnapshot.child("highscores").toString());
-                for (DataSnapshot snapshot :dataSnapshot.getChildren()){
 
-//                    highscores.add((Highscore) snapshot.child(snapshot.getKey()).getValue());
-                    Log.d("TAGTAGTAG",snapshot.getKey());
-                    Log.d("TAGTAGTAG",snapshot.toString());
+                // Loops through each of the children of the Datasnapshot and gets the Highscore objects back
+                for (DataSnapshot snapshot :dataSnapshot.getChildren()){
+                    highscores.add(snapshot.getValue(Highscore.class));
                 }
+
+                // Gives back the highscores list
                 activity.gotHighscores(highscores);
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
 
+                // If something went wrong reading the values, give back error message
+                activity.gotHighscoresError(error.getMessage());
+            }
         });
     }
 
